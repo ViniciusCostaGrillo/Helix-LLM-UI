@@ -15,12 +15,21 @@ class BackgroundWorker:
     def __init__(self, queue_name: str = "generation_tasks"):
         self.queue_name = queue_name
         self.queue = TaskQueue()
+        # Configure priority-ordered list of queues
+        if not (queue_name.endswith("_high") or queue_name.endswith("_default") or queue_name.endswith("_low")):
+            self.listen_queues = [
+                f"{queue_name}_high",
+                f"{queue_name}_default",
+                f"{queue_name}_low"
+            ]
+        else:
+            self.listen_queues = [queue_name]
         self.executor = None
         self.running = False
 
     def start(self, concurrency: int = 4):
         logger.info(
-            f"Starting BackgroundWorker for queue '{self.queue_name}' with concurrency={concurrency}..."
+            f"Starting BackgroundWorker for queue '{self.queue_name}' (listening to priorities) with concurrency={concurrency}..."
         )
         self.executor = ThreadPoolExecutor(max_workers=concurrency)
         self.running = True
@@ -34,9 +43,10 @@ class BackgroundWorker:
     def listen(self):
         while self.running:
             try:
-                task = self.queue.dequeue(self.queue_name, timeout=1)
+                task = self.queue.dequeue(self.listen_queues, timeout=1)
                 if task:
-                    logger.info(f"Worker dequeued task ID={task.get('task_id')}. Dispatching to executor...")
+                    logger.info(f"Worker dequeued task ID={task.get('task_id')} from priority queue. Dispatching to executor...")
+
                     self.executor.submit(self.process_task, task)
             except Exception as e:
                 logger.error(f"Error in worker main listener loop: {e}")

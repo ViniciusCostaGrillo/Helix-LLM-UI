@@ -19,7 +19,16 @@ class MockRedis:
     def ping(self) -> bool:
         return True
 
+    def delete(self, *names: str) -> int:
+        count = 0
+        for name in names:
+            if name in self._queues:
+                del self._queues[name]
+                count += 1
+        return count
+
     def rpush(self, name: str, value: str) -> int:
+
         if name not in self._queues:
             self._queues[name] = queue.Queue()
         self._queues[name].put(value)
@@ -31,16 +40,25 @@ class MockRedis:
         if not keys:
             return None
         
-        name = keys[0]
-        if name not in self._queues:
-            self._queues[name] = queue.Queue()
-        
-        q = self._queues[name]
-        try:
-            val = q.get(block=True, timeout=timeout if timeout > 0 else None)
-            return (name, val)
-        except queue.Empty:
-            return None
+        import time
+        start_time = time.time()
+        while True:
+            for name in keys:
+                if name in self._queues:
+                    try:
+                        val = self._queues[name].get_nowait()
+                        return (name, val)
+                    except queue.Empty:
+                        pass
+            
+            elapsed = time.time() - start_time
+            if timeout > 0 and elapsed >= timeout:
+                return None
+            elif timeout <= 0:
+                return None
+            
+            time.sleep(0.05)
+
 
     def llen(self, name: str) -> int:
         if name not in self._queues:

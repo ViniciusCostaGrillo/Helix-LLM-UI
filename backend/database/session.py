@@ -1,21 +1,6 @@
 import os
-from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
-
-# Get PostgreSQL connection string from environment variables
-DATABASE_URL = os.getenv(
-    "DATABASE_URL", 
-    "postgresql://postgres:postgres@localhost:5432/ui_ai_db"
-)
-
-# Create engine and session factories
-connect_args = {}
-if DATABASE_URL.startswith("sqlite"):
-    connect_args = {"check_same_thread": False}
-
-engine = create_engine(DATABASE_URL, pool_pre_ping=True, connect_args=connect_args)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
+from sqlalchemy.orm import declarative_base
+from backend.database.sharding import core_engine as engine, ShardedSessionLocal as SessionLocal
 
 # Declarative base class for models
 Base = declarative_base()
@@ -27,3 +12,4 @@ def get_db():
         yield db
     finally:
         db.close()
+
