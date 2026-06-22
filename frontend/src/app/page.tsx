@@ -1,63 +1,107 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React from "react";
+import { useStore } from "../lib/store";
+import ProjectsView from "../components/projects";
+import EditorPreview from "../components/editor-preview";
+import HistoryLogsView from "../components/history-logs";
+import RagConsoleView from "../components/rag-console";
+import SettingsView from "../components/settings";
+import { FolderGit2, Code2, History, Database, Settings } from "lucide-react";
+
+export default function DashboardHome() {
+  const { activeTab, setActiveTab } = useStore();
+
+  const menuItems = [
+    { id: "projects", label: "Projects Explorer", icon: FolderGit2 },
+    { id: "editor", label: "Editor & Preview", icon: Code2 },
+    { id: "history", label: "Execution History", icon: History },
+    { id: "rag", label: "Vector RAG Console", icon: Database },
+    { id: "settings", label: "Control Settings", icon: Settings }
+  ];
+
+  const renderActiveView = () => {
+    switch (activeTab) {
+      case "projects":
+        return <ProjectsView />;
+      case "editor":
+        return <EditorPreview />;
+      case "history":
+        return <HistoryLogsView />;
+      case "rag":
+        return <RagConsoleView />;
+      case "settings":
+        return <SettingsView />;
+      default:
+        return <ProjectsView />;
+    }
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="flex h-screen bg-zinc-950 text-white overflow-hidden font-sans">
+      {/* Navigation Sidebar */}
+      <aside className="w-72 bg-zinc-900 border-r border-zinc-800 p-6 flex flex-col justify-between shrink-0">
+        <div>
+          {/* Logo brand branding */}
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-400 to-teal-500 flex items-center justify-center font-extrabold text-black text-xl shadow-md shadow-emerald-500/10">
+              U
+            </div>
+            <div>
+              <span className="text-lg font-bold tracking-tight text-white block">UI AI ECOSYSTEM</span>
+              <span className="text-[9px] font-bold text-zinc-550 uppercase tracking-widest block mt-0.5">Automated Builder</span>
+            </div>
+          </div>
+
+          {/* Nav menu links */}
+          <nav className="space-y-1.5">
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = activeTab === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveTab(item.id)}
+                  className={`w-full flex items-center gap-3.5 px-4.5 py-3 rounded-xl font-bold text-sm transition-all duration-200 cursor-pointer ${
+                    isActive
+                      ? "bg-emerald-500 text-black shadow-lg shadow-emerald-500/10 scale-[1.01]"
+                      : "text-zinc-400 hover:bg-zinc-800 hover:text-white hover:scale-[1.01]"
+                  }`}
+                >
+                  <Icon className={`w-5 h-5 ${isActive ? "text-black" : "text-zinc-400 group-hover:text-white"}`} />
+                  {item.label}
+                </button>
+              );
+            })}
+          </nav>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Footer info */}
+        <div className="text-[10px] text-zinc-650 font-mono tracking-wider border-t border-zinc-800/60 pt-4 flex justify-between items-center">
+          <span>WORKSPACE CLIENT</span>
+          <span>v1.0.0</span>
+        </div>
+      </aside>
+
+      {/* Main Workspace Frame Container */}
+      <main className="flex-1 flex flex-col overflow-hidden bg-zinc-950">
+        {/* Topbar status display */}
+        <header className="h-16 border-b border-zinc-800/80 px-8 flex justify-between items-center bg-zinc-900/20 shrink-0">
+          <h1 className="text-sm font-extrabold tracking-wide uppercase text-zinc-400">
+            {menuItems.find((m) => m.id === activeTab)?.label || "Workspace"}
+          </h1>
+          
+          <div className="flex items-center gap-4 text-xs">
+            <span className="flex items-center gap-1.5 font-bold text-zinc-400">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              Local Workers Active
+            </span>
+          </div>
+        </header>
+
+        {/* Dynamic Inner Panel Workspace scroll viewport */}
+        <div className="flex-1 overflow-y-auto p-8 bg-zinc-950 select-none">
+          {renderActiveView()}
         </div>
       </main>
     </div>
