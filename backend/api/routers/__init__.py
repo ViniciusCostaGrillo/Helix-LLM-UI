@@ -5,6 +5,7 @@ from backend.api.routers.dataset import router as dataset_router
 from backend.api.routers.projects import router as projects_router
 from backend.api.routers.components import router as components_router
 from backend.api.routers.styles import router as styles_router
+from backend.api.routers.rag import router as rag_router
 
 # List of all configured routers
 all_routers = [
@@ -14,5 +15,6 @@ all_routers = [
     dataset_router,
     projects_router,
     components_router,
-    styles_router
+    styles_router,
+    rag_router
 ]
