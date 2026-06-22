@@ -45,6 +45,8 @@ dist/
 postgres_data/
 redis_data/
 chromadb_data/
+*.db
+*.db-journal
 
 # IDE & OS
 .vscode/
