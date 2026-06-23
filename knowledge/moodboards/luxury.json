@@ -1,0 +1,6 @@
+{
+  "style": "luxury",
+  "colors": ["#0b0a0f", "#d4af37", "#f5f5f7", "#1a1824"],
+  "typography": ["Playfair Display", "Inter"],
+  "references": ["elara", "noirframe"]
+}

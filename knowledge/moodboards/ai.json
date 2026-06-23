@@ -1,0 +1,6 @@
+{
+  "style": "ai",
+  "colors": ["#030712", "#8b5cf6", "#f9fafb", "#9ca3af"],
+  "typography": ["Space Grotesk", "Inter"],
+  "references": ["openai", "anthropic"]
+}

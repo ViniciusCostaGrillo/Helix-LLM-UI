@@ -1,0 +1,6 @@
+{
+  "style": "dashboard",
+  "colors": ["#09090b", "#10b981", "#fafafa", "#71717a"],
+  "typography": ["Geist Mono", "Geist Sans"],
+  "references": ["vercel", "stripe"]
+}

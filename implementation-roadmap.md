@@ -1310,3 +1310,395 @@ Os Masterpieces terão prioridade sobre o restante do dataset e serão responsá
 * Conhecimento de nível Awwwards.
 
 Com o passar do tempo, os Masterpieces se tornarão o núcleo de conhecimento mais valioso de toda a plataforma.
+
+
+# PHASE 28 — DESIGNER INTELLIGENCE ENGINE
+
+## Objetivo
+
+Transformar a plataforma de um simples gerador de interfaces em um verdadeiro sistema de direção criativa assistida por IA.
+
+A Fase 28 introduz uma camada de inteligência responsável por interpretar intenções visuais, selecionar referências, construir estratégias de design e planejar a experiência antes da geração de código.
+
+O foco desta fase não é gerar código diretamente, mas sim tomar decisões de design de alto nível da mesma forma que um Diretor de Arte, Product Designer ou Creative Director faria.
+
+---
+
+# Objetivos Principais
+
+* Entender objetivos de negócio.
+* Entender o público-alvo.
+* Entender o contexto do projeto.
+* Construir estratégias visuais.
+* Selecionar referências automaticamente.
+* Montar moodboards.
+* Definir Design Systems.
+* Planejar layouts.
+* Planejar animações.
+* Planejar experiência do usuário.
+* Guiar os agentes de geração.
+
+---
+
+# Estrutura
+
+Criar:
+
+```txt
+backend/designer/
+
+designer_agent/
+
+creative_director_agent/
+
+moodboard_engine/
+
+visual_planning_engine/
+
+style_composer/
+
+reference_composer/
+```
+
+---
+
+# Designer Agent
+
+## Objetivo
+
+Interpretar o prompt do usuário e transformá-lo em uma intenção visual estruturada.
+
+Exemplo:
+
+Prompt:
+
+```text
+Create a luxury footwear ecommerce website.
+```
+
+Resultado:
+
+```yaml
+industry: fashion
+
+category: ecommerce
+
+style:
+  - luxury
+  - editorial
+  - premium
+
+theme:
+  - light
+
+animations:
+  - subtle
+
+priority:
+  - typography
+  - product showcase
+```
+
+---
+
+# Creative Director Agent
+
+## Objetivo
+
+Atuar como um Diretor de Arte virtual.
+
+Responsabilidades:
+
+* Definir direção criativa.
+* Escolher referências.
+* Definir identidade visual.
+* Escolher estilos.
+* Escolher tipografias.
+* Escolher paletas.
+* Escolher animações.
+* Escolher assets.
+* Definir hierarquia visual.
+
+---
+
+# Moodboard Engine
+
+## Objetivo
+
+Montar moodboards automáticos com base no projeto solicitado.
+
+Criar:
+
+```txt
+knowledge/
+
+moodboards/
+
+luxury/
+fashion/
+editorial/
+saas/
+startup/
+agency/
+ai/
+dashboard/
+minimal/
+glassmorphism/
+```
+
+---
+
+# Estrutura do Moodboard
+
+```json
+{
+  "style": "luxury",
+
+  "colors": [
+    "#0F0F0F",
+    "#D4AF37"
+  ],
+
+  "typography": [
+    "Playfair Display",
+    "Inter"
+  ],
+
+  "references": [
+    "elara",
+    "noirframe"
+  ]
+}
+```
+
+---
+
+# Visual Planning Engine
+
+## Objetivo
+
+Criar um plano visual completo antes da geração de código.
+
+Pipeline:
+
+```text
+Prompt
+
+↓
+
+Designer Agent
+
+↓
+
+Creative Director Agent
+
+↓
+
+Visual Planning Engine
+
+↓
+
+Code Agent
+```
+
+---
+
+# Exemplo de Plano Visual
+
+```yaml
+layout:
+  hero
+  gallery
+  products
+  testimonials
+  footer
+
+theme:
+  luxury
+
+spacing:
+  large
+
+animations:
+  gsap
+
+scroll:
+  lenis
+
+background:
+  premium_gradient
+
+references:
+  elara
+  noirframe
+```
+
+---
+
+# Style Composer
+
+## Objetivo
+
+Combinar diferentes estilos para criar novas identidades visuais.
+
+Exemplo:
+
+```text
+Luxury
+
++
+
+Glassmorphism
+
++
+
+Editorial
+
++
+
+Minimalism
+```
+
+↓
+
+Resultado:
+
+```yaml
+style:
+  luxury-editorial-glass
+```
+
+---
+
+# Reference Composer
+
+## Objetivo
+
+Combinar referências armazenadas no sistema.
+
+Fontes possíveis:
+
+* Masterpieces
+* Design Systems
+* Skills
+* Assets
+* Component Library
+* Motion Library
+
+---
+
+# Exemplo
+
+Entrada:
+
+```text
+Elara Footwear
+
++
+
+NoirFrame Fashion
+
++
+
+Refokus
+```
+
+Saída:
+
+```yaml
+references:
+  - elara
+  - noirframe
+  - refokus
+
+merged_style:
+  luxury-editorial-modern
+```
+
+---
+
+# Integração com Masterpieces
+
+O Designer Intelligence Engine deverá priorizar referências provenientes dos Masterpieces.
+
+Coleções prioritárias:
+
+* Masterpieces
+* MasterpieceComponents
+* MasterpieceAssets
+* MasterpieceAnimations
+* MasterpieceDesignSystems
+
+---
+
+# Integração com Knowledge Engine
+
+Consultar:
+
+* Assets
+* Skills
+* Design Systems
+* Themes
+* Components
+* Animations
+* Prompt Templates
+
+Antes de iniciar qualquer geração.
+
+---
+
+# Designer Workflow
+
+```text
+Prompt
+
+↓
+
+Designer Agent
+
+↓
+
+Creative Director Agent
+
+↓
+
+Moodboard Engine
+
+↓
+
+Style Composer
+
+↓
+
+Reference Composer
+
+↓
+
+Visual Planning Engine
+
+↓
+
+Code Agent
+
+↓
+
+Preview
+```
+
+---
+
+# Objetivo Final
+
+Permitir que a plataforma pense como um designer antes de agir como um desenvolvedor.
+
+Ao invés de simplesmente gerar componentes, o sistema será capaz de:
+
+* Planejar experiências.
+* Construir identidades visuais.
+* Selecionar referências.
+* Criar estratégias de design.
+* Produzir interfaces mais coerentes.
+* Produzir interfaces mais criativas.
+* Produzir interfaces dignas de premiações.
+
+A Fase 28 representa a transição da plataforma de um gerador de interfaces para um verdadeiro Diretor de Arte alimentado por Inteligência Artificial.

@@ -1,0 +1,6 @@
+{
+  "style": "glassmorphism",
+  "colors": ["#0f172a", "#38bdf8", "#f8fafc", "#64748b"],
+  "typography": ["Outfit", "Inter"],
+  "references": ["refokus", "stripe"]
+}

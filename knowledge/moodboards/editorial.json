@@ -1,0 +1,6 @@
+{
+  "style": "editorial",
+  "colors": ["#fcfbf9", "#111111", "#444444", "#a39081"],
+  "typography": ["Lora", "Inter"],
+  "references": ["elara"]
+}

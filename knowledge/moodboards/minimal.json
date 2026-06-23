@@ -1,0 +1,6 @@
+{
+  "style": "minimal",
+  "colors": ["#fafafa", "#171717", "#e5e5e5", "#737373"],
+  "typography": ["Helvetica Neue", "Inter"],
+  "references": ["minimalist-gallery", "linear"]
+}

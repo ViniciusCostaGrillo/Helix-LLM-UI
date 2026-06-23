@@ -1,0 +1,6 @@
+{
+  "style": "startup",
+  "colors": ["#0a0f1d", "#6366f1", "#f8fafc", "#475569"],
+  "typography": ["Plus Jakarta Sans", "Inter"],
+  "references": ["stripe", "linear"]
+}

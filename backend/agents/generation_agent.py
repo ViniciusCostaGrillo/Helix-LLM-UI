@@ -12,6 +12,7 @@ from backend.schemas.extractor import ExtractedStyles, ExtractionResult, PageMet
 from backend.schemas.rag import RAGQueryRequest
 from backend.schemas.vision import ColorPalette, GridLayout, SpacingMetrics, VisualDensity, VisionMetadata
 from backend.rag.service import RAGService
+from backend.designer.visual_planning_engine import VisualPlanningEngine
 
 logger = logging.getLogger(__name__)
 
@@ -39,39 +40,37 @@ class GenerationAgent:
             logger.warning(f"RAG query failed: {e}. Running with empty context.")
 
 
-        # 2. Extract design hints from prompt keywords
-        prompt_lower = prompt.lower()
-        bg_color = "#ffffff"
-        primary_color = "#3b82f6"
-        secondary_color = "#10b981"
-        text_color = "#1f2937"
-        fonts = ["Inter"]
+        # 2. Call the Visual Planning Engine to build a structured Visual Plan
+        logger.info("GenerationAgent: running Visual Planning Engine...")
+        visual_planner = VisualPlanningEngine()
+        visual_plan = visual_planner.plan(prompt)
 
-        if "dark" in prompt_lower:
-            bg_color = "#111827"
-            text_color = "#f9fafb"
-        if "blue" in prompt_lower:
-            primary_color = "#2563eb"
-        elif "green" in prompt_lower:
-            primary_color = "#16a34a"
-        elif "red" in prompt_lower:
-            primary_color = "#dc2626"
-        elif "luxury" in prompt_lower or "gold" in prompt_lower:
-            primary_color = "#d97706"
-            bg_color = "#1e1b4b" if "dark" in prompt_lower else "#fffbeb"
+        # Extract design hints from Visual Plan
+        colors_list = visual_plan.creative_direction.colors
+        bg_color = colors_list[0] if len(colors_list) > 0 else "#ffffff"
+        primary_color = colors_list[1] if len(colors_list) > 1 else "#3b82f6"
+        secondary_color = colors_list[2] if len(colors_list) > 2 else "#10b981"
+        text_color = colors_list[3] if len(colors_list) > 3 else "#1f2937"
+        
+        fonts = visual_plan.creative_direction.typography if visual_plan.creative_direction.typography else ["Inter"]
 
-        # 3. Create synthetic ExtractionResult and VisionMetadata representing the prompt
+        # 3. Create synthetic ExtractionResult and VisionMetadata representing the plan layout
         elements = []
-        if "sidebar" in prompt_lower or "dashboard" in prompt_lower:
-            elements.append(SemanticElement(tag="aside", text="Sidebar navigation menus and settings panel", children=[]))
-            elements.append(SemanticElement(tag="main", text="Main dashboard area with charts, metrics cards, and header", children=[]))
-        elif "landing" in prompt_lower or "hero" in prompt_lower:
-            elements.append(SemanticElement(tag="header", text="Navigation bar with logo and link options", children=[]))
-            elements.append(SemanticElement(tag="section", text="Hero header section with title, description, and action button", children=[]))
-            elements.append(SemanticElement(tag="section", text="Card section displaying layout patterns features", children=[]))
-            elements.append(SemanticElement(tag="footer", text="Footer section containing copyright and social links", children=[]))
-        else:
-            elements.append(SemanticElement(tag="section", text=f"Generated layout container based on prompt: {prompt}", children=[]))
+        for name in visual_plan.layout:
+            tag = "section"
+            if name == "header":
+                tag = "header"
+            elif name == "footer":
+                tag = "footer"
+            elif name in ["sidebar", "aside"]:
+                tag = "aside"
+            elif name == "navbar":
+                tag = "nav"
+            elements.append(SemanticElement(
+                tag=tag,
+                text=f"{name.capitalize()} component layout placeholder based on design guidelines.",
+                children=[]
+            ))
 
         extraction = ExtractionResult(
             metadata=PageMetadata(title=f"Generated {project_id}", description=prompt),
@@ -80,14 +79,18 @@ class GenerationAgent:
             clean_text=prompt
         )
 
+        margins_val = {"top": 20, "bottom": 20, "left": 40, "right": 40}
+        if visual_plan.spacing == "spacious":
+            margins_val = {"top": 40, "bottom": 40, "left": 80, "right": 80}
+        elif visual_plan.spacing == "compact":
+            margins_val = {"top": 10, "bottom": 10, "left": 20, "right": 20}
 
         vision = VisionMetadata(
             colors=ColorPalette(background_color=bg_color, dominant_colors=[bg_color, primary_color, secondary_color]),
-            grid=GridLayout(grid_type="dashboard" if "dashboard" in prompt_lower else "grid", vertical_splits=[], horizontal_splits=[]),
-            spacing=SpacingMetrics(margins={"top": 20, "bottom": 20, "left": 40, "right": 40}),
+            grid=GridLayout(grid_type="dashboard" if visual_plan.visual_intent.category == "dashboard" else "grid", vertical_splits=[], horizontal_splits=[]),
+            spacing=SpacingMetrics(margins=margins_val),
             density=VisualDensity(content_percentage=50, whitespace_percentage=50),
         )
-
 
         # 4. Generate Layout Design Guidelines
         analysis_res = self.analyzer.analyze(extraction, vision)
@@ -194,4 +197,5 @@ class GenerationAgent:
             "codegen_res": codegen_res.model_dump(),
             "site_dir": site_dir,
             "indexed_documents": 2 + components_indexed,
+            "visual_plan": visual_plan.model_dump(),
         }

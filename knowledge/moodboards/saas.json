@@ -1,0 +1,6 @@
+{
+  "style": "saas",
+  "colors": ["#000000", "#0072f5", "#f4f4f5", "#8f8f93"],
+  "typography": ["Inter", "Geist"],
+  "references": ["vercel", "linear"]
+}

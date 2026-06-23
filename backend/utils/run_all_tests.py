@@ -28,6 +28,7 @@ TEST_SCRIPTS = [
     "backend/utils/test_motion_engine.py",
     "backend/utils/test_knowledge_engine.py",
     "backend/utils/test_upload_api.py",
+    "backend/utils/test_designer_engine.py",
 ]
 
 

@@ -77,3 +77,18 @@ def start_codegen(request: CodegenRequest, db: Session = Depends(get_db)):
         status="processing"
     )
 
+
+from backend.designer.visual_planning_engine import VisualPlanningEngine
+from backend.schemas.designer import VisualPlan
+
+class VisualPlanRequest(BaseModel):
+    prompt: str
+
+@router.post("/visual_plan", response_model=VisualPlan)
+def get_visual_plan(request: VisualPlanRequest):
+    logger.info(f"Received visual plan request for prompt: {request.prompt}")
+    planner = VisualPlanningEngine()
+    plan = planner.plan(request.prompt)
+    return plan
+
+
