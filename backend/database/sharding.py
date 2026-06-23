@@ -17,11 +17,11 @@ ANALYTICS_DATABASE_URL = os.getenv(
 # Configure sqlite threading args if SQLite is active
 connect_args_core = {}
 if DATABASE_URL.startswith("sqlite"):
-    connect_args_core = {"check_same_thread": False}
+    connect_args_core = {"check_same_thread": False, "timeout": 30}
 
 connect_args_analytics = {}
 if ANALYTICS_DATABASE_URL.startswith("sqlite"):
-    connect_args_analytics = {"check_same_thread": False}
+    connect_args_analytics = {"check_same_thread": False, "timeout": 30}
 
 # Instantiate distinct database engines
 core_engine = create_engine(DATABASE_URL, pool_pre_ping=True, connect_args=connect_args_core)

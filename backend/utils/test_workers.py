@@ -64,7 +64,7 @@ def run_tests() -> None:
         logger.info(f"Database records created. Execution ID={execution.id}, Job ID={job.id}")
 
         # 3. Setup Task Queue & Enqueue task
-        queue_name = "test_tasks_queue"
+        queue_name = "test_tasks_queue_default"
         t_queue = TaskQueue()
         
         # Clean previous queue items if any

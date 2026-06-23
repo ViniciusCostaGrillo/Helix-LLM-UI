@@ -6,6 +6,11 @@ client = TestClient(app)
 
 def test_endpoints():
     print("Running API routing and validation checks...")
+    from backend.database.session import Base
+    from backend.database.sharding import core_engine, analytics_engine
+    Base.metadata.create_all(bind=core_engine)
+    Base.metadata.create_all(bind=analytics_engine)
+    
     success = True
     
     # 1. Health check
