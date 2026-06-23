@@ -7,7 +7,8 @@ import EditorPreview from "../components/editor-preview";
 import HistoryLogsView from "../components/history-logs";
 import RagConsoleView from "../components/rag-console";
 import SettingsView from "../components/settings";
-import { FolderGit2, Code2, History, Database, Settings } from "lucide-react";
+import KnowledgeView from "../components/knowledge";
+import { FolderGit2, Code2, History, Database, Settings, FileUp } from "lucide-react";
 
 export default function DashboardHome() {
   const { activeTab, setActiveTab } = useStore();
@@ -17,6 +18,7 @@ export default function DashboardHome() {
     { id: "editor", label: "Editor & Preview", icon: Code2 },
     { id: "history", label: "Execution History", icon: History },
     { id: "rag", label: "Vector RAG Console", icon: Database },
+    { id: "knowledge", label: "Knowledge Ingest", icon: FileUp },
     { id: "settings", label: "Control Settings", icon: Settings }
   ];
 
@@ -30,6 +32,8 @@ export default function DashboardHome() {
         return <HistoryLogsView />;
       case "rag":
         return <RagConsoleView />;
+      case "knowledge":
+        return <KnowledgeView />;
       case "settings":
         return <SettingsView />;
       default:

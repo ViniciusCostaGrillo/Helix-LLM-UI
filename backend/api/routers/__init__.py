@@ -8,6 +8,7 @@ from backend.api.routers.styles import router as styles_router
 from backend.api.routers.rag import router as rag_router
 from backend.api.routers.training import router as training_router
 from backend.api.routers.health import router as health_router
+from backend.api.routers.knowledge import router as knowledge_router
 
 # List of all configured routers
 all_routers = [
@@ -20,6 +21,7 @@ all_routers = [
     styles_router,
     rag_router,
     training_router,
-    health_router
+    health_router,
+    knowledge_router
 ]
 
