@@ -46,10 +46,75 @@ export default function ChatView() {
   const [attachedUrl, setAttachedUrl] = useState("");
   const [crawlMode, setCrawlMode] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadingFile, setUploadingFile] = useState(false);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatMessages]);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingFile(true);
+    addLog(`[SYSTEM] Enviando arquivo via chat: ${file.name}`);
+
+    // Create user message in chat indicating file upload
+    const userMsgId = `msg_${Date.now()}`;
+    addChatMessage({
+      id: userMsgId,
+      role: "user",
+      content: `Fazer upload do arquivo de links: **${file.name}**`,
+      timestamp: new Date().toLocaleTimeString().slice(0, 5),
+      status: "completed"
+    });
+
+    // Create assistant loading message
+    const assistantMsgId = `msg_res_${Date.now()}`;
+    addChatMessage({
+      id: assistantMsgId,
+      role: "assistant",
+      content: "Processando arquivo de lote e enfileirando URLs para extração...",
+      timestamp: new Date().toLocaleTimeString().slice(0, 5),
+      status: "pending"
+    });
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch(`${apiBaseUrl}/importer/upload?promote_to_masterpiece=true&category=saas`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        addLog(`[SYSTEM] Upload via chat concluído. ${data.jobs_queued} tarefas adicionadas.`);
+        updateChatMessage(assistantMsgId, {
+          content: `O arquivo **${file.name}** foi processado com sucesso! Enfileiramos **${data.jobs_queued}** tarefas na fila de extração em lote.\n\nVocê pode acompanhar o andamento das tarefas na aba **Library Explorer ➔ Ingestion Jobs Queue**.`,
+          status: "completed"
+        });
+      } else {
+        const errData = await res.json();
+        addLog(`[SYSTEM] Falha no upload via chat: ${errData.detail || "Erro desconhecido"}`);
+        updateChatMessage(assistantMsgId, {
+          content: `Falha ao processar arquivo: ${errData.detail || "Certifique-se de que o arquivo contém um link válido por linha."}`,
+          status: "completed"
+        });
+      }
+    } catch (err: any) {
+      addLog(`[SYSTEM] Erro de rede no upload via chat: ${err.message}`);
+      updateChatMessage(assistantMsgId, {
+        content: `Erro de rede ao enviar arquivo: ${err.message}`,
+        status: "completed"
+      });
+    } finally {
+      setUploadingFile(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
 
   const activeProject = projects.find((p) => p.id === selectedProjectId) || projects[0];
 
@@ -637,11 +702,19 @@ export default function MinimalHero() {
 
           {/* Actual textarea input */}
           <div className="flex items-center gap-2">
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept=".txt"
+              className="hidden"
+              onChange={handleFileUpload}
+            />
             <button
               type="button"
-              className="p-2 rounded-xl bg-zinc-950 border border-zinc-850 hover:border-zinc-700 text-zinc-500 hover:text-white cursor-pointer transition-colors"
-              title="Anexar arquivo"
-              onClick={() => alert("Upload de arquivos simulado para RAG.")}
+              disabled={uploadingFile}
+              className="p-2 rounded-xl bg-zinc-950 border border-zinc-850 hover:border-zinc-700 text-zinc-500 hover:text-white cursor-pointer transition-colors disabled:opacity-50"
+              title="Anexar arquivo de links (.txt)"
+              onClick={() => fileInputRef.current?.click()}
             >
               <Paperclip className="w-4 h-4" />
             </button>
