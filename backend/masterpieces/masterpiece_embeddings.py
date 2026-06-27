@@ -10,21 +10,25 @@ class MasterpieceEmbeddingsManager:
 
     def __init__(self) -> None:
         self.chroma = ChromaClientManager()
-        self.encoder = None
+        self._encoder = None
         
-        # Try importing sentence-transformers
-        try:
-            from sentence_transformers import SentenceTransformer
-            self.encoder = SentenceTransformer("all-MiniLM-L6-v2")
-            logger.info("SentenceTransformer loaded successfully for Masterpieces embeddings.")
-        except Exception as e:
-            logger.warning(f"Could not load SentenceTransformer: {e}. Falling back to mock embeddings.")
+    @property
+    def encoder(self):
+        if self._encoder is None:
+            try:
+                from sentence_transformers import SentenceTransformer
+                self._encoder = SentenceTransformer("all-MiniLM-L6-v2")
+                logger.info("SentenceTransformer loaded successfully for Masterpieces embeddings.")
+            except Exception as e:
+                logger.warning(f"Could not load SentenceTransformer: {e}. Falling back to mock embeddings.")
+        return self._encoder
 
     def get_vector(self, text: str) -> List[float]:
         """Generates a 128-dimensional embedding vector (padded/mocked if no encoder)."""
-        if self.encoder:
+        encoder = self.encoder
+        if encoder:
             try:
-                emb = self.encoder.encode(text).tolist()
+                emb = encoder.encode(text).tolist()
                 # If MiniLM-L6-v2, size is 384. pad/slice to 128 or use as-is.
                 # Actually, standardizing to the size of the encoder is best, but let's pad/slice to 128
                 # to keep it aligned with other database collections which use 128.

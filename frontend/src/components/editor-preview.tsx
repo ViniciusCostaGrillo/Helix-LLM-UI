@@ -179,7 +179,7 @@ export default function EditorPreview() {
   return (
     <div className="flex flex-col gap-6 w-full h-full">
       {/* File selector header */}
-      <div className="bg-zinc-900 border border-zinc-800 px-6 py-4 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="bg-zinc-900/40 border border-white/5 px-6 py-4 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-emerald-500/10 rounded-lg border border-emerald-500/20 text-emerald-500">
             <Code2 className="w-5 h-5" />
@@ -204,7 +204,7 @@ export default function EditorPreview() {
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
                     isSelected
                       ? "bg-emerald-500 text-black border-emerald-500"
-                      : "bg-zinc-950 border-zinc-800 hover:border-zinc-700 text-zinc-400"
+                      : "bg-zinc-950/40 border border-white/5 hover:border-zinc-700 text-zinc-400"
                   }`}
                 >
                   {comp.name}.tsx
@@ -218,15 +218,15 @@ export default function EditorPreview() {
       {/* Workspace split columns */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full items-start">
         {/* Left Column: Monaco Code Editor */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden flex flex-col">
-          <div className="bg-zinc-950 border-b border-zinc-800 px-5 py-3 flex justify-between items-center">
+        <div className="bg-zinc-900/40 border border-white/5 rounded-2xl overflow-hidden flex flex-col">
+          <div className="bg-zinc-950/60 border-b border-white/5 px-5 py-3 flex justify-between items-center">
             <span className="text-xs font-bold text-zinc-400 flex items-center gap-2">
               <Code2 className="w-4 h-4 text-emerald-500" /> Source Editor
             </span>
             <span className="text-[10px] font-mono text-zinc-500 uppercase">TypeScript React</span>
           </div>
 
-          <div className="py-2.5 bg-[#1e1e1e]">
+          <div className="py-2.5 bg-[#1b1b1c]">
             {activeComp ? (
               <Editor
                 height="500px"
@@ -237,7 +237,7 @@ export default function EditorPreview() {
                 options={{
                   minimap: { enabled: false },
                   fontSize: 13,
-                  fontFamily: "Fira Code, Menlo, Monaco, Courier New, monospace",
+                  fontFamily: "var(--font-jetbrains-mono), monospace",
                   scrollbar: { vertical: "visible" },
                   automaticLayout: true
                 }}
@@ -253,8 +253,8 @@ export default function EditorPreview() {
         {/* Right Column: Preview pane & RAG console */}
         <div className="space-y-6">
           {/* Visual Preview Container */}
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden flex flex-col">
-            <div className="bg-zinc-950 border-b border-zinc-800 px-5 py-3 flex justify-between items-center">
+          <div className="bg-zinc-900/40 border border-white/5 rounded-2xl overflow-hidden flex flex-col">
+            <div className="bg-zinc-950/60 border-b border-white/5 px-5 py-3 flex justify-between items-center flex-wrap gap-2">
               <span className="text-xs font-bold text-zinc-400 flex items-center gap-2">
                 <Monitor className="w-4 h-4 text-emerald-500" /> Interactive Preview Panel
               </span>
@@ -290,7 +290,7 @@ export default function EditorPreview() {
           </div>
 
           {/* RAG Refinement Console drawer */}
-          <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl">
+          <div className="bg-zinc-900/40 border border-white/5 p-6 rounded-2xl">
             <h3 className="text-base font-bold text-white mb-2 flex items-center gap-2">
               <Database className="text-emerald-500 w-5 h-5" /> RAG Refinement Console
             </h3>
@@ -305,7 +305,7 @@ export default function EditorPreview() {
                 placeholder="e.g. Find layout colors and spacing profile..."
                 value={refinePrompt}
                 onChange={(e) => setRefinePrompt(e.target.value)}
-                className="flex-1 bg-zinc-950 border border-zinc-800 hover:border-zinc-700 rounded-lg px-4 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-medium"
+                className="flex-1 bg-zinc-950 border border-white/5 hover:border-zinc-700 rounded-lg px-4 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-medium"
               />
               <button
                 type="submit"

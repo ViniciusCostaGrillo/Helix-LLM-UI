@@ -24,6 +24,16 @@ export interface Execution {
   url: string;
 }
 
+export interface ChatMessage {
+  id: string;
+  role: "user" | "assistant" | "system";
+  content: string;
+  timestamp: string;
+  code?: string;
+  logs?: string[];
+  status?: "pending" | "running" | "completed" | "failed";
+}
+
 interface ProviderKeys {
   gemini: string;
   openai: string;
@@ -42,6 +52,7 @@ interface DashboardState {
   apiBaseUrl: string;
   mockMode: boolean;
   keys: ProviderKeys;
+  chatMessages: ChatMessage[];
   
   setActiveTab: (tab: string) => void;
   setProjects: (projects: Project[]) => void;
@@ -58,25 +69,15 @@ interface DashboardState {
   setApiBaseUrl: (url: string) => void;
   setMockMode: (mode: boolean) => void;
   setKeys: (keys: Partial<ProviderKeys>) => void;
+  addChatMessage: (msg: ChatMessage) => void;
+  clearChatMessages: () => void;
+  updateChatMessage: (id: string, updates: Partial<ChatMessage>) => void;
 }
 
 export const useStore = create<DashboardState>((set) => ({
-  activeTab: "projects",
-  projects: [
-    {
-      id: "mock-project-id-1",
-      name: "E-Commerce Landing Page",
-      description: "Responsive hero, products grid, and interactive cart button layout.",
-      user_id: "default-user"
-    },
-    {
-      id: "mock-project-id-2",
-      name: "SaaS Admin Dashboard",
-      description: "Sidebar, headers, charts, and dark style layout panels.",
-      user_id: "default-user"
-    }
-  ],
-  selectedProjectId: "mock-project-id-1",
+  activeTab: "chat",
+  projects: [],
+  selectedProjectId: "",
   components: [
     {
       id: "mock-component-id-1",
@@ -238,12 +239,21 @@ export default function DashboardLayout() {
   ],
   prompt: "Add a dark mode card grid block section with emerald accent buttons and visual density spacing profile",
   apiBaseUrl: "http://localhost:8000",
-  mockMode: true,
+  mockMode: false,
   keys: {
     gemini: "",
     openai: "",
     anthropic: ""
   },
+  chatMessages: [
+    {
+      id: "msg_welcome",
+      role: "assistant",
+      content: "Olá! Sou o assistente Helix UI. Como posso ajudar você a construir sua interface hoje?",
+      timestamp: new Date().toLocaleTimeString().slice(0, 5),
+      status: "completed"
+    }
+  ],
   
   setActiveTab: (tab) => set({ activeTab: tab }),
   setProjects: (projects) => set({ projects }),
@@ -261,5 +271,10 @@ export default function DashboardLayout() {
   setPrompt: (prompt) => set({ prompt }),
   setApiBaseUrl: (url) => set({ apiBaseUrl: url }),
   setMockMode: (mode) => set({ mockMode: mode }),
-  setKeys: (keys) => set((state) => ({ keys: { ...state.keys, ...keys } }))
+  setKeys: (keys) => set((state) => ({ keys: { ...state.keys, ...keys } })),
+  addChatMessage: (msg) => set((state) => ({ chatMessages: [...state.chatMessages, msg] })),
+  clearChatMessages: () => set({ chatMessages: [] }),
+  updateChatMessage: (id, updates) => set((state) => ({
+    chatMessages: state.chatMessages.map(m => m.id === id ? { ...m, ...updates } : m)
+  }))
 }));

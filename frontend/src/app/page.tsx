@@ -2,63 +2,57 @@
 
 import React from "react";
 import { useStore } from "../lib/store";
-import ProjectsView from "../components/projects";
+import ChatView from "../components/chat-view";
 import EditorPreview from "../components/editor-preview";
-import HistoryLogsView from "../components/history-logs";
-import RagConsoleView from "../components/rag-console";
+import LibraryView from "../components/library";
 import SettingsView from "../components/settings";
-import KnowledgeView from "../components/knowledge";
-import { FolderGit2, Code2, History, Database, Settings, FileUp } from "lucide-react";
+import { MessageSquare, Code2, Database, Settings } from "lucide-react";
 
 export default function DashboardHome() {
   const { activeTab, setActiveTab } = useStore();
 
   const menuItems = [
-    { id: "projects", label: "Projects Explorer", icon: FolderGit2 },
-    { id: "editor", label: "Editor & Preview", icon: Code2 },
-    { id: "history", label: "Execution History", icon: History },
-    { id: "rag", label: "Vector RAG Console", icon: Database },
-    { id: "knowledge", label: "Knowledge Ingest", icon: FileUp },
+    { id: "chat", label: "Assistente Chat", icon: MessageSquare },
+    { id: "editor", label: "Component Workspace", icon: Code2 },
+    { id: "library", label: "Library Explorer", icon: Database },
     { id: "settings", label: "Control Settings", icon: Settings }
   ];
 
   const renderActiveView = () => {
     switch (activeTab) {
-      case "projects":
-        return <ProjectsView />;
+      case "chat":
+        return <ChatView />;
       case "editor":
         return <EditorPreview />;
-      case "history":
-        return <HistoryLogsView />;
-      case "rag":
-        return <RagConsoleView />;
-      case "knowledge":
-        return <KnowledgeView />;
+      case "library":
+        return <LibraryView />;
       case "settings":
         return <SettingsView />;
       default:
-        return <ProjectsView />;
+        return <ChatView />;
     }
   };
 
   return (
-    <div className="flex h-screen bg-zinc-950 text-white overflow-hidden font-sans">
+    <div className="flex h-screen bg-zinc-950 text-white overflow-hidden font-sans select-none antialiased">
       {/* Navigation Sidebar */}
-      <aside className="w-72 bg-zinc-900 border-r border-zinc-800 p-6 flex flex-col justify-between shrink-0">
-        <div>
+      <aside className="w-64 bg-zinc-950 border-r border-white/5 p-6 flex flex-col justify-between shrink-0">
+        <div className="space-y-8">
           {/* Logo brand branding */}
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-400 to-teal-500 flex items-center justify-center font-extrabold text-black text-xl shadow-md shadow-emerald-500/10">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-400 to-teal-500 flex items-center justify-center font-extrabold text-black text-lg shadow-md shadow-emerald-500/10 font-mono">
               H
             </div>
             <div>
-              <span className="text-lg font-bold tracking-tight text-white block">HELIX UI</span>
-              <span className="text-[9px] font-bold text-zinc-550 uppercase tracking-widest block mt-0.5">Automated Builder</span>
+              <span className="text-sm font-bold tracking-wider text-white block font-mono">HELIX UI</span>
+              <span className="text-[8px] font-bold text-emerald-500 uppercase tracking-widest block mt-0.5 font-mono">
+                AI Orchestrator
+              </span>
             </div>
           </div>
 
           {/* Nav menu links */}
-          <nav className="space-y-1.5">
+          <nav className="space-y-1">
             {menuItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -66,14 +60,14 @@ export default function DashboardHome() {
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
-                  className={`w-full flex items-center gap-3.5 px-4.5 py-3 rounded-xl font-bold text-sm transition-all duration-200 cursor-pointer ${
+                  className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-xs transition-all duration-200 cursor-pointer ${
                     isActive
-                      ? "bg-emerald-500 text-black shadow-lg shadow-emerald-500/10 scale-[1.01]"
-                      : "text-zinc-400 hover:bg-zinc-800 hover:text-white hover:scale-[1.01]"
+                      ? "bg-white/5 border border-white/10 text-emerald-450 shadow-sm"
+                      : "text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.02]"
                   }`}
                 >
-                  <Icon className={`w-5 h-5 ${isActive ? "text-black" : "text-zinc-400 group-hover:text-white"}`} />
-                  {item.label}
+                  <Icon className={`w-4 h-4 ${isActive ? "text-emerald-400" : "text-zinc-550"}`} />
+                  <span className="font-mono">{item.label}</span>
                 </button>
               );
             })}
@@ -81,30 +75,30 @@ export default function DashboardHome() {
         </div>
 
         {/* Footer info */}
-        <div className="text-[10px] text-zinc-650 font-mono tracking-wider border-t border-zinc-800/60 pt-4 flex justify-between items-center">
-          <span>WORKSPACE CLIENT</span>
-          <span>v1.0.0</span>
+        <div className="text-[9px] text-zinc-650 font-mono tracking-wider border-t border-white/5 pt-4 flex justify-between items-center">
+          <span>WORKSPACE</span>
+          <span className="text-emerald-500/80 font-bold">v1.1.0</span>
         </div>
       </aside>
 
       {/* Main Workspace Frame Container */}
       <main className="flex-1 flex flex-col overflow-hidden bg-zinc-950">
         {/* Topbar status display */}
-        <header className="h-16 border-b border-zinc-800/80 px-8 flex justify-between items-center bg-zinc-900/20 shrink-0">
-          <h1 className="text-sm font-extrabold tracking-wide uppercase text-zinc-400">
+        <header className="h-14 border-b border-white/5 px-8 flex justify-between items-center bg-zinc-950 shrink-0">
+          <h1 className="text-[10px] font-bold tracking-widest uppercase text-zinc-400 font-mono">
             {menuItems.find((m) => m.id === activeTab)?.label || "Workspace"}
           </h1>
           
-          <div className="flex items-center gap-4 text-xs">
-            <span className="flex items-center gap-1.5 font-bold text-zinc-400">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <div className="flex items-center gap-4 text-xs font-mono">
+            <span className="flex items-center gap-1.5 font-bold text-[10px] text-zinc-500">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
               Local Workers Active
             </span>
           </div>
         </header>
 
         {/* Dynamic Inner Panel Workspace scroll viewport */}
-        <div className="flex-1 overflow-y-auto p-8 bg-zinc-950 select-none">
+        <div className="flex-1 overflow-y-auto p-8 bg-zinc-950">
           {renderActiveView()}
         </div>
       </main>

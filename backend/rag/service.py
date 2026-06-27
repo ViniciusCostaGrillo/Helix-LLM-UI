@@ -149,14 +149,15 @@ Instructions:
         import google.generativeai as genai
 
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model_name = os.getenv("GEMINI_MODEL_NAME", "gemini-1.5-pro")
+        model = genai.GenerativeModel(model_name)
         try:
             response = model.generate_content(prompt)
             return RAGQueryResponse(
                 prompt=original_prompt,
                 answer=response.text,
                 retrieved_contexts=retrieved,
-                metadata={"provider": "gemini", "model": "gemini-1.5-flash"}
+                metadata={"provider": "gemini", "model": model_name}
             )
         except Exception as e:
             logger.error(f"Gemini RAG query failed: {e}")

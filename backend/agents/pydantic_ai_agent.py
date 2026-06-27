@@ -36,8 +36,9 @@ class PydanticAIAgent:
             logger.info(f"PydanticAI: Using OpenAIModel ({model_name})")
             return OpenAIModel(model_name, base_url=base_url, api_key=openai_key)
         elif gemini_key:
-            logger.info("PydanticAI: Using GeminiModel (gemini-1.5-flash)")
-            return GeminiModel("gemini-1.5-flash")
+            model_name = os.getenv("GEMINI_MODEL_NAME", "gemini-1.5-pro")
+            logger.info(f"PydanticAI: Using GeminiModel ({model_name})")
+            return GeminiModel(model_name)
         else:
             logger.warning("PydanticAI: No valid API keys found. Falling back to TestModel (Mock).")
             return TestModel()

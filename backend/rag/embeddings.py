@@ -1,5 +1,4 @@
 from typing import List
-from sentence_transformers import SentenceTransformer
 from backend.schemas.analyzer import AnalysisResult, ComponentMetadata
 from backend.schemas.codegen import GeneratedComponent
 from backend.schemas.embeddings import ComponentEmbedding, PageEmbedding, StyleEmbedding
@@ -24,10 +23,11 @@ class EmbeddingGenerator:
         logger.debug(f"EmbeddingGenerator initialized using model: {self.model_name}")
 
     @property
-    def model(self) -> SentenceTransformer:
+    def model(self):
         global _cached_transformer_model
         if _cached_transformer_model is None:
             logger.info(f"Loading SentenceTransformer model '{self.model_name}' offline...")
+            from sentence_transformers import SentenceTransformer
             _cached_transformer_model = SentenceTransformer(self.model_name)
             logger.info("Model loaded successfully.")
         return _cached_transformer_model

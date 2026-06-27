@@ -41,9 +41,9 @@ export default function SettingsView() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
       {/* Backend connection setup */}
-      <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl space-y-6">
-        <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-          <Server className="text-emerald-500" /> Connection Parameters
+      <div className="bg-zinc-900/40 border border-white/5 p-6 rounded-2xl space-y-6">
+        <h2 className="text-sm font-bold tracking-wider uppercase text-white flex items-center gap-2">
+          <Server className="text-emerald-500 w-4 h-4" /> Connection Parameters
         </h2>
 
         <div className="space-y-4">
@@ -57,21 +57,21 @@ export default function SettingsView() {
                 value={apiBaseUrl}
                 onChange={(e) => setApiBaseUrl(e.target.value)}
                 placeholder="http://localhost:8000"
-                className="flex-1 bg-zinc-950 border border-zinc-800 hover:border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 font-mono"
+                className="flex-1 bg-zinc-950 border border-white/5 hover:border-zinc-700 rounded-lg px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
               />
               <button
                 onClick={handleTestConnection}
-                className="px-4 py-2.5 rounded-lg bg-zinc-950 border border-zinc-850 hover:border-zinc-750 text-xs font-bold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer"
+                className="px-4 py-2.5 rounded-lg bg-zinc-950 border border-white/5 hover:border-zinc-750 text-xs font-bold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer"
               >
                 Test URL
               </button>
             </div>
           </div>
 
-          <div className="flex items-center justify-between p-4 bg-zinc-950 rounded-xl border border-zinc-850">
+          <div className="flex items-center justify-between p-4 bg-zinc-950 rounded-xl border border-white/5">
             <div>
-              <span className="text-sm font-bold text-white block">Offline Mock Sandbox Fallback</span>
-              <span className="text-xs text-zinc-550 block mt-0.5 leading-relaxed">
+              <span className="text-xs font-bold text-white block">Offline Mock Sandbox Fallback</span>
+              <span className="text-[10px] text-zinc-550 block mt-0.5 leading-relaxed">
                 Processes pipelines locally without active LLM/crawler API keys using mock models.
               </span>
             </div>
@@ -109,14 +109,14 @@ export default function SettingsView() {
       </div>
 
       {/* Model keys setup */}
-      <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl space-y-6">
+      <div className="bg-zinc-900/40 border border-white/5 p-6 rounded-2xl space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-            <Key className="text-emerald-500" /> LLM Key Configuration
+          <h2 className="text-sm font-bold tracking-wider uppercase text-white flex items-center gap-2">
+            <Key className="text-emerald-500 w-4 h-4" /> LLM Key Configuration
           </h2>
           <button
             onClick={() => setShowKeys(!showKeys)}
-            className="p-2 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-400 hover:text-white cursor-pointer"
+            className="p-2 rounded-lg bg-zinc-950 border border-white/5 text-zinc-400 hover:text-white cursor-pointer"
           >
             {showKeys ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
           </button>
@@ -124,7 +124,7 @@ export default function SettingsView() {
 
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+            <label className="block text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-2">
               Gemini API Key
             </label>
             <input
@@ -132,12 +132,12 @@ export default function SettingsView() {
               value={keys.gemini}
               onChange={(e) => setKeys({ gemini: e.target.value })}
               placeholder={keys.gemini ? "••••••••••••••••" : "AIzaSy..."}
-              className="w-full bg-zinc-950 border border-zinc-800 hover:border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 font-mono"
+              className="w-full bg-zinc-950 border border-white/5 hover:border-zinc-700 rounded-lg px-4 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+            <label className="block text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-2">
               OpenAI API Key
             </label>
             <input
@@ -145,12 +145,12 @@ export default function SettingsView() {
               value={keys.openai}
               onChange={(e) => setKeys({ openai: e.target.value })}
               placeholder={keys.openai ? "••••••••••••••••" : "sk-..."}
-              className="w-full bg-zinc-950 border border-zinc-800 hover:border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 font-mono"
+              className="w-full bg-zinc-950 border border-white/5 hover:border-zinc-700 rounded-lg px-4 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+            <label className="block text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-2">
               Anthropic API Key
             </label>
             <input
@@ -158,7 +158,7 @@ export default function SettingsView() {
               value={keys.anthropic}
               onChange={(e) => setKeys({ anthropic: e.target.value })}
               placeholder={keys.anthropic ? "••••••••••••••••" : "sk-ant-..."}
-              className="w-full bg-zinc-950 border border-zinc-800 hover:border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 font-mono"
+              className="w-full bg-zinc-950 border border-white/5 hover:border-zinc-700 rounded-lg px-4 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
             />
           </div>
         </div>

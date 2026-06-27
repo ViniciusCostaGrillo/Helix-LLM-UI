@@ -1,0 +1,8 @@
+category:
+- saas
+description: Custom layout synthesis parameters learned from Www_awwwards_com.
+name: www_awwwards_com_skill
+rules:
+- Prioritize visual layouts emphasizing saas features.
+- Combine fonts Cinzel, Inter for headline-body pairings.
+- Inject smooth Lenis scrolling animations.

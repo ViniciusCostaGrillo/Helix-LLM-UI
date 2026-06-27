@@ -68,7 +68,8 @@ Return ONLY valid JSON. Do not include markdown code block formatting.
         elif gemini_key:
             import google.generativeai as genai
             genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            model_name = os.getenv("GEMINI_MODEL_NAME", "gemini-1.5-pro")
+            model = genai.GenerativeModel(model_name)
             response = model.generate_content(llm_prompt)
             content = response.text.strip()
             if content.startswith("```"):
