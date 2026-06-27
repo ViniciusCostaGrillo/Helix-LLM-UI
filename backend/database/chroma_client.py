@@ -7,6 +7,9 @@ from backend.utils.custom_logger import setup_logger
 
 logger = setup_logger("database.chroma_client")
 
+# Global singleton connection cache
+_cached_chroma_client = None
+
 
 class ChromaClientManager:
     """Manager for ChromaDB connection, collection initialization,
@@ -15,6 +18,11 @@ class ChromaClientManager:
     """
 
     def __init__(self) -> None:
+        global _cached_chroma_client
+        if _cached_chroma_client is not None:
+            self.client = _cached_chroma_client
+            return
+
         host = os.getenv("CHROMADB_HOST", "localhost")
         port = int(os.getenv("CHROMADB_PORT", "8000"))
         
@@ -29,6 +37,7 @@ class ChromaClientManager:
             # Test connection by listing collections
             self.client.list_collections()
             logger.info("Connected to ChromaDB server successfully.")
+            _cached_chroma_client = self.client
         except Exception as e:
             logger.warning(
                 f"Failed to connect to ChromaDB server: {e}. "
@@ -44,6 +53,7 @@ class ChromaClientManager:
                 settings=Settings(allow_reset=True)
             )
             logger.info(f"Initialized local ChromaDB PersistentClient at: {db_path}")
+            _cached_chroma_client = self.client
 
     def get_or_create_collection(self, collection_name: str) -> Any:
         """Retrieves or initializes a vector collection by name."""

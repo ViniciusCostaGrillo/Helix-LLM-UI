@@ -9,6 +9,9 @@ from backend.utils.custom_logger import setup_logger
 
 logger = setup_logger("rag.embeddings")
 
+# Global cached model singleton
+_cached_transformer_model = None
+
 
 class EmbeddingGenerator:
     """Service to generate dense float vector embeddings (384 dimensions)
@@ -18,16 +21,16 @@ class EmbeddingGenerator:
 
     def __init__(self, model_name: str = "all-MiniLM-L6-v2") -> None:
         self.model_name = model_name
-        self._model = None
         logger.debug(f"EmbeddingGenerator initialized using model: {self.model_name}")
 
     @property
     def model(self) -> SentenceTransformer:
-        if self._model is None:
+        global _cached_transformer_model
+        if _cached_transformer_model is None:
             logger.info(f"Loading SentenceTransformer model '{self.model_name}' offline...")
-            self._model = SentenceTransformer(self.model_name)
+            _cached_transformer_model = SentenceTransformer(self.model_name)
             logger.info("Model loaded successfully.")
-        return self._model
+        return _cached_transformer_model
 
     def get_embedding(self, text: str) -> List[float]:
         """Encodes a single text string into a dense float vector."""
